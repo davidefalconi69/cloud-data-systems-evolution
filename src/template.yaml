@@ -1,0 +1,144 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  FinOps AutoStop Automation.
+  Deploys a scheduled Lambda function to stop idle EC2 instances based on telemetry.
+  Designed for cost optimization in dev/test environments.
+
+# --- PARAMETERS ---
+Parameters:
+  DryRun:
+    Type: String
+    Default: 'false'
+    AllowedValues: ['true', 'false']
+    Description: 'If true, runs logic and alerts but stops nothing (Audit Mode).'
+  CpuThreshold:
+    Type: Number
+    Default: 2.0
+    Description: 'Max CPU percentage to consider an instance idle.'
+  DiskThresholdMB:
+    Type: Number
+    Default: 150
+    Description: 'Max Disk I/O (MB) to consider an instance idle (Sum of Read+Write).'
+  LookbackMinutes:
+    Type: Number
+    Default: 60
+    Description: 'Minutes of metrics to analyze. Higher values prevent false positives.'
+  ScheduleExpression:
+    Type: String
+    Default: 'cron(0 * * * ? *)'
+    Description: 'Schedule for the check (default: hourly).'
+  AlertEmail:
+    Type: String
+    Description: 'Email address for notifications'
+
+Resources:
+  # --- NOTIFICATIONS ---
+  AutoStopTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: !Sub "${AWS::StackName}-Notifications"
+
+  # --- LOGGING ---
+  # Explicit LogGroup to enforce retention and avoid infinite log storage costs.
+  AutoStopLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${AWS::StackName}-AutoStopExecutor"
+      RetentionInDays: 30
+  
+  # --- EMAIL ALERTS ---
+  AutoStopSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref AutoStopTopic
+      Protocol: email
+      Endpoint: !Ref AlertEmail
+
+  # --- LAMBDA FUNCTION ---
+  AutoStopFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-AutoStopExecutor"
+      CodeUri: .
+      Handler: autostop.lambda_handler
+      Runtime: python3.13
+      Timeout: 180
+      # Memory Note: We use 512MB not just for RAM, but because Lambda CPU 
+      # scales linearly with memory. Threading benefits from the extra CPU credits.
+      MemorySize: 512
+      Environment:
+        Variables:
+          DRY_RUN: !Ref DryRun
+          CPU_THRESHOLD: !Ref CpuThreshold
+          DISK_BYTES_THRESHOLD: !Sub "${DiskThresholdMB}000000" # Approximate MB to Bytes conversion for simplicity
+          LOOKBACK_MINUTES: !Ref LookbackMinutes
+          SNS_TOPIC_ARN: !Ref AutoStopTopic
+          LOG_LEVEL: INFO
+      Events:
+        HourlyCheck:
+          Type: Schedule
+          Properties:
+            Schedule: !Ref ScheduleExpression
+            Name: FinOpsHourlyTrigger
+            Description: Triggers the idle check every hour.
+      Policies:
+        # --- IAM PERMISSIONS ---
+        # Principle of Least Privilege (PoLP) strictly applied.
+        
+        - Version: '2012-10-17'
+          Statement:
+            # 1. Discovery (Read Only)
+            - Effect: Allow
+              Action:
+                - ec2:DescribeInstances
+                - ec2:DescribeTags
+                - ec2:DescribeInstanceStatus
+                - cloudwatch:GetMetricData
+                - cloudwatch:ListMetrics
+              Resource: '*'
+            
+            # 2. Action (Stop Only Tagged Resources)
+            # ABAC Pattern: Only allow stopping resources that opted-in via tags.
+            - Effect: Allow
+              Action:
+                - ec2:StopInstances
+              Resource: '*'
+              Condition:
+                StringEquals:
+                  ec2:ResourceTag/AutoStop: 'true'
+
+            # 3. Audit Trail (Tagging)
+            # Security Condition: Can only add tags to resources that already have the AutoStop tag.
+            # Prevents privilege escalation (tagging random prod servers to stop them).
+            - Effect: Allow
+              Action:
+                - ec2:CreateTags
+              Resource: '*'
+              Condition:
+                StringEquals:
+                  ec2:ResourceTag/AutoStop: 'true'
+
+            # 4. Notifications
+            - Effect: Allow
+              Action:
+                - sns:Publish
+              Resource: !Ref AutoStopTopic
+            
+            # 5. KMS (Conditional)
+            # Necessary for encrypted SNS topics.
+            # WARNING: In a strict production environment, 'Resource' should be scoped to a specific Key ARN.
+            # For the scope of this thesis, wildcard permissions are acceptable to simplify deployment.
+            - Effect: Allow
+              Action:
+                - kms:GenerateDataKey
+                - kms:Decrypt
+              Resource: '*'
+
+Outputs:
+  FunctionArn:
+    Description: "Lambda Function ARN"
+    Value: !GetAtt AutoStopFunction.Arn
+  SnsTopicArn:
+    Description: "SNS Topic for Alerts"
+    Value: !Ref AutoStopTopic

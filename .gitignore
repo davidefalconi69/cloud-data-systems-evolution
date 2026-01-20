@@ -10,3 +10,14 @@ desktop.ini
 # PDF/Office temp files
 ~$*
 *.tmp
+
+# AWS SAM
+.aws-sam/
+samconfig.toml
+
+# Python
+__pycache__/
+*.pyc
+*.egg-info/
+venv/
+.venv/
