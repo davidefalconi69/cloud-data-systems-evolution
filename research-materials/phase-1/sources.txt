@@ -1,0 +1,41 @@
+Navigating the Data Architecture Landscape: A Comparative Analysis of Data Warehouse, Data Lake, Data Lakehouse, and Data Mesh
+https://www.researchgate.net/publication/374422175_Navigating_the_Data_Architecture_Landscape_A_Comparative_Analysis_of_Data_Warehouse_Data_Lake_Data_Lakehouse_and_Data_Mesh
+
+Comparative Analysis of Data Lakes and Data Warehouses for Machine Learning
+https://www.researchgate.net/publication/390555262_Comparative_Analysis_of_Data_Lakes_and_Data_Warehouses_for_Machine_Learning
+
+Evolving Software Architectures from Monolithic Systems to Resilient Microservices: Best Practices, Challenges and Future Trends
+https://thesai.org/Publications/ViewPaper?Volume=15&Issue=9&Code=IJACSA&SerialNo=1
+
+Data Mesh: a Systematic Gray Literature Review
+https://arxiv.org/abs/2304.01062
+
+Enhancing Clinical Data Infrastructure for AI Research: Comparative Evaluation of Data Management Architectures
+https://www.jmir.org/2025/1/e74976
+
+From Data Warehouse to Lakehouse: A Comparative Review
+https://www.researchgate.net/publication/366670363_From_Data_Warehouse_to_Lakehouse_A_Comparative_Review
+
+Toward data lakes as central building blocks for data management and analysis
+https://pmc.ncbi.nlm.nih.gov/articles/PMC9442782/
+
+Systematic Literature Review on Cloud Computing Security: Threats and Mitigation Strategies
+https://www.scirp.org/journal/paperinformation?paperid=132024
+
+Financial Cloud Cost Optimization: A FinOps Framework for Modern Financial Institutions
+https://journalwjarr.com/content/financial-cloud-cost-optimization-finops-framework-modern-financial-institutions
+
+Evaluation of Multi-Cloud Strategies and Challenges in Small Scale Organizations
+https://www.researchgate.net/publication/388003711_EVALUATION_OF_MULTI-CLOUD_STRATEGIES_AND_CHALLENGES_IN_SMALL_SCALE_ORGANIZATIONS
+
+Cloud Computing Impacts on Business Models: A study based on Osterwalder’s Business Model Canvas
+https://www.diva-portal.org/smash/record.jsf?pid=diva2%3A1794769&dswid=1673
+
+A Survey on Privacy and Security in Distributed Cloud Computing: Exploring Federated Learning and Beyond
+https://ieeexplore.ieee.org/document/10963898
+
+Systematic Review of Performance Optimization Techniques for Data Pipelines in High-Volume Cloud-Based Analytics Systems
+https://www.researchgate.net/publication/391505545_Systematic_Review_of_Performance_Optimization_Techniques_for_Data_Pipelines_in_High-Volume_Cloud-Based_Analytics_Systems
+
+Challenges and Opportunities in Big Data Analytics for Industry 4.0: A Systematic Evaluation of Current Architectures
+https://ieeexplore.ieee.org/document/11214321
