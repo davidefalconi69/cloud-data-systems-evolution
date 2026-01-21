@@ -37,7 +37,8 @@ SNS_TOPIC_ARN = os.environ.get('SNS_TOPIC_ARN', '')
 # than erroneously stopping a legitimately active one.
 # Robust parsing: float() is used before int() to safely handle decimal inputs (e.g. "2.0")
 CPU_THRESHOLD = float(os.environ.get('CPU_THRESHOLD', 2.0)) 
-NETWORK_BYTES_THRESHOLD = int(float(os.environ.get('NETWORK_BYTES_THRESHOLD', 5 * 1024 * 1024)))
+_net_mb = float(os.environ.get('NETWORK_THRESHOLD_MB', 5))
+NETWORK_BYTES_THRESHOLD = int(_net_mb * 1024 * 1024)
 
 # Disk Threshold Processing
 # Convert to Bytes using standard binary conversion (1 MiB = 1024 * 1024 Bytes).
@@ -148,8 +149,9 @@ def get_aggregated_metrics(instance_id: str) -> Dict[str, float]:
 
     # Multiple metric dimensions are queried to distinguish between true idle states 
     # and "processing" nodes (e.g., high I/O with low CPU).
-    # Note: For larger scale deployments (>10k instances), migrating to BatchGetMetricData 
-    # would reduce API call volume; however, per-instance querying is sufficient for this scope.
+    # Note: For larger scale deployments (>10k instances), the GetMetricData API could be
+    # restructured to query metrics for multiple instances per call (up to 500 queries per request),
+    # reducing API costs; however, per-instance querying is sufficient for this scope.
     metric_queries = [
         {"Id": "cpu", "MetricStat": {"Metric": {"Namespace": "AWS/EC2", "MetricName": "CPUUtilization", "Dimensions": [{"Name": "InstanceId", "Value": instance_id}]}, "Period": 300, "Stat": "Maximum"}},
         {"Id": "net_in", "MetricStat": {"Metric": {"Namespace": "AWS/EC2", "MetricName": "NetworkIn", "Dimensions": [{"Name": "InstanceId", "Value": instance_id}]}, "Period": 300, "Stat": "Sum"}},
