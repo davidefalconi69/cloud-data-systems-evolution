@@ -63,7 +63,7 @@ Resources:
       CodeUri: .
       Handler: autostop.lambda_handler
       Runtime: python3.13
-      Timeout: 180
+      Timeout: 900
       # Memory Note: We use 512MB not just for RAM, but because Lambda CPU 
       # scales linearly with memory. Threading benefits from the extra CPU credits.
       MemorySize: 512
@@ -71,7 +71,7 @@ Resources:
         Variables:
           DRY_RUN: !Ref DryRun
           CPU_THRESHOLD: !Ref CpuThreshold
-          DISK_BYTES_THRESHOLD: !Sub "${DiskThresholdMB}000000" # Approximate MB to Bytes conversion for simplicity
+          DISK_THRESHOLD_MB: !Ref DiskThresholdMB
           LOOKBACK_MINUTES: !Ref LookbackMinutes
           SNS_TOPIC_ARN: !Ref AutoStopTopic
           LOG_LEVEL: INFO

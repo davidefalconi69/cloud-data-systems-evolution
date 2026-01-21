@@ -35,9 +35,14 @@ SNS_TOPIC_ARN = os.environ.get('SNS_TOPIC_ARN', '')
 # Note: Default thresholds are configured conservatively. The logic prioritizes 
 # service availability, preferring to allow an idle instance to persist rather 
 # than erroneously stopping a legitimately active one.
+# Robust parsing: float() is used before int() to safely handle decimal inputs (e.g. "2.0")
 CPU_THRESHOLD = float(os.environ.get('CPU_THRESHOLD', 2.0)) 
-NETWORK_BYTES_THRESHOLD = int(os.environ.get('NETWORK_BYTES_THRESHOLD', 5 * 1024 * 1024))
-DISK_BYTES_THRESHOLD = int(os.environ.get('DISK_BYTES_THRESHOLD', 1 * 1024 * 1024))
+NETWORK_BYTES_THRESHOLD = int(float(os.environ.get('NETWORK_BYTES_THRESHOLD', 5 * 1024 * 1024)))
+
+# Disk Threshold Processing
+# Convert to Bytes using standard binary conversion (1 MiB = 1024 * 1024 Bytes).
+_disk_mb = float(os.environ.get('DISK_THRESHOLD_MB', 150))
+DISK_BYTES_THRESHOLD = int(_disk_mb * 1024 * 1024)
 
 # Time window settings
 # LOOKBACK_MINUTES defines the temporal analysis window. Shorter windows increase 
