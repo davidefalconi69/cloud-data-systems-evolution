@@ -39,3 +39,21 @@ https://www.researchgate.net/publication/391505545_Systematic_Review_of_Performa
 
 Challenges and Opportunities in Big Data Analytics for Industry 4.0: A Systematic Evaluation of Current Architectures
 https://ieeexplore.ieee.org/document/11214321
+
+Everything you need to know about data spaces: simplified access and shared ai data services
+https://visionspol.eu/en/2024/11/20/everything-you-need-to-know-about-data-spaces-simplified-access-and-shared-ai-data-services/
+
+Querying Apache Iceberg with Sub-Second Performance
+https://www.firebolt.io/blog/querying-apache-iceberg-with-sub-second-performance
+
+Systems and methods for data processing and enterprise AI applications
+https://patents.google.com/patent/US11954112B2/en?q=(AI-native+warehouse)&after=priority:20200101
+
+Disaggregated query processing utilizing precise, parallel, asynchronous shared storage repository access
+https://patents.google.com/patent/US12271375B2/en
+
+Ray: The AI Compute Engine
+https://www.ray.io/
+
+Search embeddings with vector search
+https://docs.cloud.google.com/bigquery/docs/vector-search
