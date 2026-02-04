@@ -1,11 +1,16 @@
-# <p align = "center"> Evolution of Cloud Systems and Data Platforms  </p>
+# Evolution of Cloud Systems and Data Platforms
 
-**<p align = "center"> Computer Engineering Thesis </p>**
+**Computer Engineering Thesis**
 
-<p align="center"> Bilal Drissi - 1087161 </p>
-<p align="center"> Davide Falconi - 1087700 </p>
+**Università degli Studi di Bergamo, A.Y. 2024-2025**
 
+**Authors:**
+- Bilal Drissi (1087161)
+- Davide Falconi (1087700)
 
-_<p align="center">University of Bergamo </p>_
+## Overview
+This repository contains the deliverables and source code for our undergraduate thesis on the evolution of cloud data systems. The project explores the transition from Data Warehouses to Data Meshes and specifically addresses FinOps challenges in modern cloud environments.
 
-_<p align="center"> A.Y. 2025-2026 </p>_
+## Repository Structure
+- **`/deliverables`**: Contains the thesis documentation in 4 distinct phases (Introduction, Research, Questionnaire, Prototype), as well as the Acknowledgments.
+- **`/src`**: Contains the source code for the **Serverless FinOps AutoStop** prototype (Phase 4). Read more about it here: [FinOps AutoStop Prototype](src/README.md).
