@@ -4,6 +4,9 @@
 This project implements a **FinOps cost-optimization tool** designed to automatically stop idle EC2 instances in development and test environments. By leveraging AWS Serverless technologies, it ensures that you only pay for compute resources when they are actually being used, strictly following the **FinOps principles**.
 
 ## Architecture
+
+![Project Architecture](architecture.png)
+
 The solution is built using a **Serverless** architecture to minimize maintenance and operational costs:
 
 *   **AWS Lambda**: Executes the core logic. It is stateless and triggered periodically, making it far more cost-efficient than a dedicated tracking server.
